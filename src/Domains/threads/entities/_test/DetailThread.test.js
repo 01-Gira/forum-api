@@ -55,6 +55,7 @@ describe('DetailThread entities', () => {
           date,
           content: 'ipsum',
           isDelete: 'false',
+          likeCount: 1
         }),
       ],
       replies: [
@@ -85,6 +86,7 @@ describe('DetailThread entities', () => {
         username: 'dicoding',
         date,
         content: 'ipsum',
+        likeCount: 1,
         replies: [
           {
             id: 'comment_reply-123',

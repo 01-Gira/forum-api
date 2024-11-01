@@ -15,11 +15,10 @@ class CommentRepositoryPostgres extends CommentRepository {
   async addComment(newComment) {
     const { content, threadId, owner } = newComment;
     const id = `comment-${this._idGenerator()}`;
-    const date = new Date().toISOString();
 
     const query = {
-      text: 'INSERT INTO comments (id, content, date, "threadId", owner) VALUES ($1, $2, $3, $4, $5) RETURNING id, content, owner',
-      values: [id, content, date, threadId, owner]
+      text: 'INSERT INTO comments (id, content,"threadId", owner) VALUES ($1, $2, $3, $4) RETURNING id, content, owner',
+      values: [id, content, threadId, owner]
     };
 
     const result = await this._pool.query(query);
@@ -49,21 +48,23 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getCommentsByThreadId(id) {
     const query = {
-      text: `SELECT cs.id, us.username, cs.date, cs.content, cs."isDelete"::text
+      text: `SELECT cs.id, us.username, cs.date, cs.content, cs."isDelete"::text, COUNT(cl.id) "likeCount"
           FROM comments cs
-          LEFT JOIN users us ON cs.owner = us.id 
+          LEFT JOIN users us ON cs.owner = us.id
+          LEFT JOIN comment_likes cl ON cs.id = cl."commentId"
           WHERE cs."threadId" = $1 GROUP BY cs.id, us.username ORDER BY cs.date ASC`,
       values: [id],
     };
-
     const results = await this._pool.query(query);
+
 
     return results.rows.map((result) => new Comment({
       id: result.id,
       username: result.username,
-      date: result.date.toISOString(), // Convert Date to ISO string
+      date: result.date.toISOString(),
       content: result.content,
-      isDelete: result.isDelete, // This should already be a string
+      isDelete: result.isDelete,
+      likeCount: Number(result.likeCount)
     }));
   }
 

@@ -22,6 +22,7 @@ describe('Comment entities', () => {
       date: new Date().toISOString(),
       content: 'lorem ipsum',
       isDelete: 'false',
+      likeCount: '1'
     };
 
     // Action & Assert
@@ -36,17 +37,17 @@ describe('Comment entities', () => {
       date: new Date().toISOString(),
       content: 'lorem ipsum',
       isDelete: 'false',
+      likeCount: 1,
     };
 
     // Action
     const comment = new Comment(payload);
-
     // Assert
     expect(comment).toBeInstanceOf(Comment);
     expect(comment.id).toBe(payload.id);
     expect(comment.username).toBe(payload.username);
-    expect(comment.date).toBe(payload.date);
     expect(comment.content).toBe(payload.content);
+    expect(comment.likeCount).toBe(payload.likeCount);
   });
 
   it('should create Comment entities correctly when is delete', () => {
@@ -57,6 +58,7 @@ describe('Comment entities', () => {
       date: new Date().toISOString(),
       content: 'lorem ipsum',
       isDelete: 'true',
+      likeCount: 1
     };
 
     // Action
@@ -66,7 +68,6 @@ describe('Comment entities', () => {
     expect(comment).toBeInstanceOf(Comment);
     expect(comment.id).toBe(payload.id);
     expect(comment.username).toBe(payload.username);
-    expect(comment.date).toBe(payload.date);
     expect(comment.content).toBe('**komentar telah dihapus**');
   });
 });

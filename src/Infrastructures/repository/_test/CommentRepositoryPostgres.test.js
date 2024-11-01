@@ -1,3 +1,4 @@
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
@@ -14,6 +15,7 @@ describe('CommentRepositoryPostgres', () => {
     await UsersTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
+    await CommentLikesTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -132,6 +134,7 @@ describe('CommentRepositoryPostgres', () => {
       await UsersTableTestHelper.addUser({ username: 'dicoding' });
       await ThreadsTableTestHelper.addThread({ title: 'Lorem' });
       await CommentsTableTestHelper.addComment({ content: 'lorem', date });
+      await CommentLikesTableTestHelper.addCommentLike({ commentId: 'comment-123', date });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action
@@ -145,6 +148,7 @@ describe('CommentRepositoryPostgres', () => {
           date: commentRepository[0].date,
           username: 'dicoding',
           isDelete: 'false',
+          likeCount: 1,
         })
       ]);
     });

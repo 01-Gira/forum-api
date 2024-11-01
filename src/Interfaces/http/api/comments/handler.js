@@ -23,8 +23,6 @@ class CommentsHandler {
     return response;
   }
 
-  
-
   async deleteCommentHandler(req, h) {
     const { id : owner } = req.auth.credentials;
     const { threadId, commentId } = req.params;

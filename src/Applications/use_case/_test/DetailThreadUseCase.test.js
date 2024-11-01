@@ -28,6 +28,7 @@ describe('DetailThreadUseCase', () => {
       date: new Date().toISOString(),
       content: 'lorem',
       isDelete: 'true',
+      likeCount: 1
     });
 
     const mockCommentTwo = new Comment({
@@ -36,6 +37,7 @@ describe('DetailThreadUseCase', () => {
       date: new Date().toISOString(),
       content: 'ipsum',
       isDelete: 'false',
+      likeCount: 2
     });
 
     const mockReply = new Reply({
@@ -86,6 +88,7 @@ describe('DetailThreadUseCase', () => {
           date: mockCommentOne.date,
           content: 'lorem',
           isDelete: 'true',
+          likeCount: 1
         }),
         new Comment({
           id: 'comment-124',
@@ -93,6 +96,7 @@ describe('DetailThreadUseCase', () => {
           date: mockCommentTwo.date,
           content: 'ipsum',
           isDelete: 'false',
+          likeCount: 2
         })
       ],
       replies: [

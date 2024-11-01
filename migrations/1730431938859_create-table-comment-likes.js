@@ -1,12 +1,8 @@
 exports.up = pgm => {
-  pgm.createTable('comment_replies', {
+  pgm.createTable('comment_likes', {
     id: {
       type: 'VARCHAR(50)',
       primaryKey: true,
-    },
-    content: {
-      type: 'TEXT',
-      notNull: true
     },
     date: {
       type: 'TIMESTAMP',
@@ -24,14 +20,10 @@ exports.up = pgm => {
       references : '"users"',
       onDelete: 'CASCADE',
       notNull: true
-    },
-    isDelete: {
-      type: 'BOOLEAN',
-      default: false
     }
   })
 };
 
 exports.down = pgm => {
-  pgm.dropTable('comment_replies');
+  pgm.dropTable('comment_likes');
 };

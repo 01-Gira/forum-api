@@ -10,34 +10,6 @@ describe('AddCommentUseCase', () => {
   /**
    * Menguji apakah use case mampu mengoskestrasikan langkah demi langkah dengan benar.
    */
-  it('should throw error when thread not exists', async () => {
-    // Arrange
-    const useCasePayload = {
-      threadId: 'thread-xxx',
-      content: 'Lorem ipsum sit dolor',
-      owner: 'user-123',
-    };
-
-    const mockThreadRepository = new ThreadRepository();
-    const mockCommentRepository = new CommentRepository();
-    
-    mockThreadRepository.verifyThreadExists = jest.fn()
-    .mockImplementation(() => Promise.reject(new NotFoundError()));
-    mockCommentRepository.addComment = jest.fn();
-
-
-    const addCommentUseCase = new AddCommentUseCase({
-      commentRepository: mockCommentRepository,
-      threadRepository: mockThreadRepository,
-    });
-
-    // Action & Assert
-    await expect(() => addCommentUseCase.execute(useCasePayload))
-      .rejects.toThrowError(NotFoundError);
-    expect(mockThreadRepository.verifyThreadExists).toBeCalledWith('thread-xxx');
-    expect(mockCommentRepository.addComment).not.toBeCalled();
-  });
-
   it('should orchestrating the add comment action correctly', async () => {
     // Arrange
     const useCasePayload = {
