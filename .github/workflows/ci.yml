@@ -3,7 +3,7 @@ name: Continuous Integration
 on: 
   pull_request:
     branches:
-      - main
+      - master
  
 jobs:
   test:
@@ -13,7 +13,23 @@ jobs:
       matrix:
         node-version: ['18.x', '20.x']
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+   
+    services:
+      postgres:
+        image: postgres
+        env:
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: mysecretpassword
+         POSTGRES_DB: forumapi_test
+         
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+ 
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -27,15 +43,13 @@ jobs:
         npm run test
       env:
         CI: true
-        PGHOST_TEST: ${{ secrets.PGHOST_TEST }}
-        PGUSER_TEST: ${{ secrets.PGUSER_TEST }}
-        PGDATABASE_TEST: ${{ secrets.PGDATABASE_TEST }}
-        PGPASSWORD_TEST: ${{ secrets.PGPASSWORD_TEST }}
-        PGPORT_TEST: ${{ secrets.PGPORT_TEST }}
-        PGHOST: ${{ secrets.PGHOST_TEST }}
-        PGUSER: ${{ secrets.PGUSER_TEST }}
-        PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
-        PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+        HOST: ${{ secrets.PGHOST_TEST }}
+        PORT: ${{ secrets.PORT }}
+        PGHOST: ${{ secrets.PGUSER_TEST }}
         PGPORT: ${{ secrets.PGPORT_TEST }}
+        PGUSER: ${{ secrets.PGUSER_TEST }}
+        PGPASSWORD: ${{ secrets.PGPASSWORD_TEST }}
+        PGDATABASE: ${{ secrets.PGDATABASE_TEST }}
         ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
-        REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
+        REFRESH_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+        ACCESS_TOKEN_AGE: ${{ secrets.ACCESS_TOKEN_AGE }}
